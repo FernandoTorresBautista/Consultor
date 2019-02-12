@@ -1,0 +1,88 @@
+extends layout
+block content
+	nav
+		p Administrador
+		br
+		li
+			a(href="./ui") Ui
+		|   
+		li
+			a(href="./query") Consultas
+		|   
+		li
+			a(href="./views") Listar views
+		|   
+		li
+			a(href="./document") Documentos
+		|   
+		li
+			a(href="./db") Conexiones
+		|   
+		li
+			a(href="./usuarios") Usuarios
+		|   
+		li
+			a(href="./out_session") Cerrar sesión
+		|   
+	nav
+		li
+			a(href='./add_db') Agregar conexion a db
+		|   
+		li
+			a.active(href='./upd_db', class="active") Modificar conexion a db
+		|   
+		li
+			a(href="./del_db") Eliminar conexion a db
+		|   
+		br
+	nav
+		p DB a modificar
+		each db in dbs
+			form(method="POST", action="./upd_db_f")
+				label Id:   
+				input(type="int", name="id", value=db.id)
+				br
+				|       
+				label Nombre:   
+				input(type="text", name="name", value=db.name)
+				br
+				|       
+				label Descripción:   
+				input(type="text", name="description", value=db.description)
+				br
+				|       
+				label Usuario:   
+				input(type="text", name="user", value=db.user)
+				br
+				|       
+				label Contraseña:   
+				input(type="text", name="password", value=db.password)
+				br
+				|       
+				label Nombre de la base de datos:   
+				input(type="text", name="dbname", value=db.dbname)
+				br
+				|       
+				label Nombre de origen de datos (dsn):   
+				input(type="text", name="dsn", value=db.dsn)
+				br
+				|       
+				label Hostsocket:   
+				input(type="text", name="hostsocket", value=db.hostsocket)
+				br
+				|       
+				label Clase del driver:   
+				input(type="text", name="classname", value=db.classname)
+				br
+				|       
+				label Sub protocolo:   
+				input(type="text", name="subprotocol", value=db.subprotocol)
+				br
+				|       
+				label Parámetros:   
+				input(type="text", name="params", value=db.params)
+				br
+				|       
+				input(type="submit", value="Aceptar")
+			br
+

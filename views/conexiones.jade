@@ -1,0 +1,57 @@
+extends layout
+block content
+	nav
+		p Administrador
+		br
+		li
+			a(href="./ui") Ui
+		|   
+		li
+			a(href="./query") Consultas
+		|   
+		li
+			a(href="./views") Listar views
+		|   
+		li
+			a(href="./document") Documentos
+		|   
+		li
+			a.active(href="./db", class="active") Conexiones
+		|   
+		li
+			a(href="./usuarios") Usuarios
+		|   
+		li
+			a(href="./out_session") Cerrar sesión
+		|   
+		br
+	nav
+		li
+			a(href='./add_db') Agregar conexion a db
+		|   
+		li
+			a(href='./upd_db') Modificar conexion a db
+		|   
+		li
+			a(href="./del_db") Eliminar conexion a db
+		|   
+		br
+	nav
+		p Lista de conexiones 
+		table(border='1')
+			thead
+				tr
+					th id
+					th name
+					th description
+					th user
+					th params
+			tbody
+				each db in dbs
+					tr
+						td=db.id
+						td=db.name
+						td=db.description
+						td=db.user
+						td=db.params
+		br

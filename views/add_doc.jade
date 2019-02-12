@@ -1,0 +1,70 @@
+extends layout
+block content
+	nav
+		p Administrador
+		br
+		li
+			a(href="./ui") Ui
+		|   
+		li
+			a(href="./query") Consultas
+		|   
+		li
+			a(href="./views") Listar views
+		|   
+		li
+			a(href="./document") Documentos
+		|   
+		li
+			a(href="./db") Conexiones
+		|   
+		li
+			a(href="./usuarios") Usuarios
+		|   
+		li
+			a(href="./out_session") Cerrar sesión
+		|   
+		br
+	nav
+		li
+			a.active(href='./add_doc', class="active") Agregar documento
+		|   
+		li
+			a(href='./addDoc') Agregar de forma externa
+		|   
+		li
+			a(href='./upd_doc') Modificar documento
+		|   
+		li
+			a(href="./del_doc") Eliminar documento
+		|   
+		br
+	nav
+		form(method="POST", action="./add_document/agregar")
+			label Id:   
+			input(type="int", name="id")
+			br
+			|       
+			label Ui_id:   
+			input(type="int", name="ui_id")
+			br
+			|       
+			label Nombre:   
+			input(type="text", name="name")
+			br
+			|       
+			label MIME:   
+			input(type="text", name="mime")
+			br
+			|       
+			label Descripción:   
+			input(type="text", name="description")
+			br
+			|       
+			label content:   
+			input(type="text", name="content")
+			br
+			|       
+			input(type="submit", value="Aceptar")
+		br
+

@@ -1,0 +1,64 @@
+extends layout
+block content
+	nav
+		p Administrador
+		br
+		li
+			a(href="./ui") Ui
+		|   
+		li
+			a(href="./query") Consultas
+		|   
+		li
+			a(href="./views") Listar views
+		|   
+		li
+			a.active(href="./document", class="active") Documentos
+		|   
+		li
+			a(href="./db") Conexiones
+		|   
+		li
+			a(href="./usuarios") Usuarios
+		|   
+		li
+			a(href="./out_session") Cerrar sesión
+		|   
+		br
+	nav
+		li
+			a(href='./add_doc') Nuevo documento
+		|   
+		li
+			a(href='./addDoc') Agregar de forma externa
+		|   
+		li
+			a(href='./upd_doc') Modificar documento
+		|   
+		li
+			a(href="./del_doc") Eliminar documento
+		|   
+		br
+	nav
+		p Lista de documentos
+		table(border='1')
+			thead
+				tr
+					th id
+					th name
+					th ui_id
+					th mime
+					th description
+					th created_at
+					th content
+			tbody
+				each doc in docs
+					tr
+						td=doc.id
+						td=doc.name
+						td=doc.ui_id
+						td=doc.mime
+						td=doc.description
+						td=doc.created_at
+						td=doc.content
+		br

@@ -1,0 +1,57 @@
+extends layout
+block content
+	nav
+		p Administrador
+		br
+		li
+			a.active(href="./ui", class="active") Ui
+		|   
+		li
+			a(href="./query") Consultas
+		|   
+		li
+			a(href="./views") Listar views
+		|   
+		li
+			a(href="./document") Documentos
+		|   
+		li
+			a(href="./db") Conexiones
+		|   
+		li
+			a(href="./usuarios") Usuarios
+		|   
+		li
+			a(href="./out_session") Cerrar sesión
+		|   
+	nav
+		li
+			a(href='./add_ui') Agregar ui
+		|   
+		li
+			a(href='./del_ui') Eliminar ui
+		|   
+	nav
+		br
+		p Lista de ui del uis
+		table(border='1')
+			thead
+				tr
+					th id
+					th name
+					th descripción
+					th index_
+					th email
+					th created_at
+			tbody
+				each ui in uis
+					tr
+						td=ui.id
+						td=ui.name
+						td=ui.description
+						td=ui.index_
+						td=ui.email
+						td=ui.created_at
+	br
+
+

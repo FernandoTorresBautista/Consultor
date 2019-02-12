@@ -1,0 +1,45 @@
+extends layout
+block content
+	nav
+		p Administrador
+		br
+		li
+			a(href="./ui") Ui
+		|   
+		li
+			a(href="./query") Consultas
+		|   
+		li
+			a(href="./views") Listar views
+		|   
+		li
+			a(href="./document") Documentos
+		|   
+		li
+			a(href="./db") Conexiones
+		|   
+		li
+			a(href="./usuarios") Usuarios
+		|   
+		li
+			a(href="./out_session") Cerrar sesión
+		|   
+	nav
+		li
+			a(href='./add_db') Agregar conexion a db
+		|   
+		li
+			a(href='./upd_db') Modificar conexion a db
+		|   
+		li
+			a.active(href="./del_db", class="active") Eliminar conexion a db
+		|   
+		br
+	nav
+		form(method="POST", action="./del_db/eliminar")
+			label Id de la db a eliminar:   
+			input(type="text", name="id")
+			br
+			|       
+			input(type="submit", value="Aceptar")
+		br

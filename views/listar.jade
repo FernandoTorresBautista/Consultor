@@ -1,0 +1,56 @@
+extends layout
+block content
+	nav
+		p Administrador
+		br
+		li
+			a(href="./ui") Ui
+		|   
+		li
+			a(href="./query") Consultas
+		|   
+		li
+			a(href="./views") Listar views
+		|   
+		li
+			a(href="./document") Documentos
+		|   
+		li
+			a(href="./db") Conexiones
+		|   
+		li
+			a.active(href="./usuarios", class="active") Usuarios
+		|   
+		li
+			a(href="./out_session") Cerrar sesión
+		|   
+		br
+	nav
+		|   
+		li
+			a(href="./crear") Crear usuario
+		|   
+		li
+			a(href="./modificar") Modificar usuario
+		|   
+		li
+			a(href="./eliminar") Eliminar usuario
+		|   
+		br
+	nav
+		p Lista de usuarios
+		table(border='1')
+			thead
+				tr
+					th id
+					th db_id
+					th email
+					th rol
+			tbody
+				each usuario in usuarios
+					tr
+						td=usuario.id
+						td=usuario.db_id
+						td=usuario.email
+						td=usuario.rol
+		br

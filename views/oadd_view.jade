@@ -1,0 +1,51 @@
+extends layout
+block content
+	nav
+		p Usuario
+		br
+		li
+			a(href="./oui") Ui
+		|   
+		li
+			a(href="./oquery") Consultas
+		|   
+		li
+			a(href="./oviews") Listar views
+		|   
+		li
+			a(href="./odocument") Documentos
+		|   
+		li
+			a(href="./odb") Conexiones
+		|   
+		li
+			a(href="./ologout") Cerrar sesión
+		|   
+	nav
+		li
+			a.active(href='./oadd_view', class="active") Agregar view
+		|   
+		li
+			a(href="./odel_view") Eliminar view
+		|   
+	nav
+		form(method="POST", action="./oadd_view/agregar")
+			label Id:   
+			input(type="int", name="id")
+			br
+			|       
+			label Nombre:   
+			input(type="text", name="name")
+			br
+			|       
+			label Id de consulta: 
+			input(type="int", name="query_id")
+			br
+			|       
+			label Consulta:   (ejemplo: CREATE VIEW name AS SELECT a.param1 as aparam1, a.param2 as aparam2, b.param3 as bparam3 FROM table1 a, table2 b WHERE b.param1 = a.param1;)
+			input(type="text", name="sql_")
+			br
+			|       
+			input(type="submit", value="Aceptar")
+		br
+

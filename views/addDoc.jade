@@ -1,0 +1,79 @@
+extends layout
+block content
+	nav
+		p Administrador
+		br
+		li
+			a(href="./ui") Ui
+		|   
+		li
+			a(href="./query") Consultas
+		|   
+		li
+			a(href="./views") Listar views
+		|   
+		li
+			a(href="./document") Documentos
+		|   
+		li
+			a(href="./db") Conexiones
+		|   
+		li
+			a(href="./usuarios") Usuarios
+		|   
+		li
+			a(href="./out_session") Cerrar sesión
+		|   
+		br
+	nav
+		li
+			a(href='./add_doc') Nuevo documento
+		|   
+		li
+			a.active(href='./addDoc', class="active") Agregar de forma externa
+		|   
+		li
+			a(href='./upd_doc') Modificar documento
+		|   
+		li
+			a(href="./del_doc") Eliminar documento
+		|   
+		br
+	nav
+		label content:   
+		input(type="file", id="files" name="files[]" multiple onchange="filesInfo()")
+		script.
+			var MAX_BYTES = 102400; // 100 KB
+			function filesInfo(event) {
+			if (!(window.File)) {
+			console.log('La API File no está soportada');
+			return;
+			}
+			var file;
+			var reader;
+			var files = document.getElementById('files').files;
+			for (var i = 0; i < files.length; i++) {
+			file = files[i];
+			reader = new FileReader();
+			reader.onloadend = onFileLoaded;
+			reader.readAsBinaryString(file);
+			}
+			}
+			function onFileLoaded(event) {
+			document.getElementById("rr").value = event.currentTarget.result.substr(0, MAX_BYTES);
+			}
+		br
+		form(method="POST", action="/ui/:nombre_ui/:nombre_document")
+			label Nombre ui:   
+			input(type="int", name="nombre_ui")
+			br
+			|       
+			label Nombre del documento:   
+			input(type="text", name="nombre_document")
+			br
+			|       
+			br
+			input(type="submit", value="Aceptar")
+			|       
+			input(type="text" id="rr" name="rr" hidden="hidden")
+			

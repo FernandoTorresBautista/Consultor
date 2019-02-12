@@ -1,0 +1,48 @@
+extends layout
+block content
+	nav
+		p Administrador
+		br
+		li
+			a(href="./ui") Ui
+		|   
+		li
+			a(href="./query") Consultas
+		|   
+		li
+			a(href="./views") Listar views
+		|   
+		li
+			a(href="./document") Documentos
+		|   
+		li
+			a(href="./db") Conexiones
+		|   
+		li
+			a(href="./usuarios") Usuarios
+		|   
+		li
+			a(href="./out_session") Cerrar sesión
+		|   
+		br
+	nav
+		li
+			a(href="./crear") Crear usuario
+		|   
+		li
+			a(href="./modificar") Modificar usuario
+		|   
+		li
+			a.active(href="./eliminar", class="active") Eliminar usuario
+		|   
+	br
+	nav 
+		p Solo lo elimina por id, para ello puede listar a los usuarios
+		form(method="POST", action="./administrador/delete_user")
+			label Id:   
+			input(type="text", name="id")
+			br
+			|       
+			input(type="submit", value="Aceptar")
+			br
+		br

@@ -1,0 +1,60 @@
+extends layout
+block content
+	nav
+		p Usuario
+		br  
+		li
+			a(href="./oui") Ui
+		|   
+		li
+			a(href="./oquery") Consultas
+		|   
+		li
+			a(href="./oviews") Listar views
+		|   
+		li
+			a(href="./odocument") Documentos
+		|   
+		li
+			a(href="./odb") Conexiones
+		|   
+		li
+			a(href="./ologout") Cerrar sesión
+		|   
+	nav
+		li
+			a.active(href='./oadd_ui', class="active") Agregar ui
+		|   
+		li
+			a(href="./odel_ui") Eliminar ui
+		|   
+		br
+	nav
+		form(method="POST", action="./oadd_ui/agregar")
+			label Id:   
+			input(type="int", name="id")
+			br
+			|       
+			label Nombre:   
+			input(type="text", name="name")
+			br
+			|       
+			label Descripción:   
+			input(type="text", name="description")
+			br
+			|       
+			label Index:   
+			input(type="text", name="index_")
+			br
+			|       
+			label email:   
+			input(type="text", name="email")
+			br
+			|       
+			label ekey:   
+			input(type="text", name="ekey")
+			br
+			|       
+			input(type="submit", value="Aceptar")
+		br
+

@@ -1,0 +1,76 @@
+extends layout
+block content
+	nav
+		p Usuario
+		br  
+		li
+			a(href="./oui") Ui
+		|   
+		li
+			a(href="./oquery") Consultas
+		|   
+		li
+			a(href="./oviews") Listar views
+		|   
+		li
+			a(href="./odocument") Documentos
+		|   
+		li
+			a(href="./odb") Conexiones
+		|   
+		li
+			a(href="./ologout") Cerrar sesión
+		|   
+	nav
+		li
+			a.active(href='./oadd_q', class="active") Agregar query
+		|   
+		li
+			a(href="./odel_q") Eliminar query
+		|   
+		br
+	nav
+		form(method="POST", action="./oadd_q/agregar")
+			label Id:   
+			br
+			input(type="int", name="id")
+			br
+			|       
+			label Nombre:   
+			br
+			input(type="text", name="name")
+			br
+			|       
+			label Categoria:   
+			br
+			input(type="text", name="category")
+			br
+			|       
+			label Descripción:   
+			br
+			input(type="text", name="description")
+			br
+			|       
+			label Db id:   
+			br
+			input(type="int", name="db_id")
+			br
+			|       
+			label Consulta:   
+			br
+			input(type="text", name="sql_")
+			br
+			|       
+			label Lista de tipos de datos que devuelve (ptypes-->int, string, date, float, bigint, bigdec, json):   
+			br
+			input(type="text", name="ptypes")
+			br
+			|       
+			label email:   
+			br
+			input(type="email", name="email")
+			br
+			|       
+			input(type="submit", value="Aceptar")
+			br
+		br

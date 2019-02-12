@@ -1,0 +1,63 @@
+extends layout
+block content
+	nav
+		p Administrador
+		br
+		li
+			a(href="./ui") Ui
+		|   
+		li
+			a(href="./query") Consultas
+		|   
+		li
+			a(href="./views") Listar views
+		|   
+		li
+			a(href="./document") Documentos
+		|   
+		li
+			a(href="./db") Conexiones
+		|   
+		li
+			a(href="./usuarios") Usuarios
+		|   
+		li
+			a(href="./out_session") Cerrar sesión
+		|   
+	nav
+		li
+			a.active(href='./add_ui', class="active") Agregar ui
+		|   
+		li
+			a(href="./del_ui") Eliminar ui
+		|   
+		br
+	nav
+		form(method="POST", action="./add_ui/agregar")
+			label Id:   
+			input(type="int", name="id")
+			br
+			|       
+			label Nombre:   
+			input(type="text", name="name")
+			br
+			|       
+			label Descripción:   
+			input(type="text", name="description")
+			br
+			|       
+			label Index:   
+			input(type="text", name="index_")
+			br
+			|       
+			label email:   
+			input(type="text", name="email")
+			br
+			|       
+			label ekey:   
+			input(type="text", name="ekey")
+			br
+			|       
+			input(type="submit", value="Aceptar")
+		br
+

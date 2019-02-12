@@ -1,0 +1,42 @@
+extends layout
+block content
+	nav
+		p Usuario
+		br
+		li
+			a(href="./oui") Ui
+		|   
+		li
+			a(href="./oquery") Consultas
+		|   
+		li
+			a(href="./oviews") Listar views
+		|   
+		li
+			a.active(href="./odocument", class="active") Documentos
+		|   
+		li
+			a(href="./odb") Conexiones
+		|   
+		li
+			a(href="./ologout") Cerrar sesión
+		|   
+	nav
+		li
+			a(href='./oadd_doc') Agregar documento
+		|   
+		li
+			a(href='./oupd_doc') Modificar documento
+		|   
+		li
+			a.active(href="./odel_doc", class="active") Eliminar documento
+		|   
+		br
+	nav
+		form(method="POST", action="./odel_doc/eliminar")
+			label Id de la db a eliminar:   
+			input(type="text", name="id")
+			br
+			|       
+			input(type="submit", value="Aceptar")
+		br

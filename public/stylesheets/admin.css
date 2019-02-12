@@ -1,0 +1,110 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#layout{
+  width: 600px;
+  min-height: 480px;
+  margin: 0 auto;
+  text-align: right;
+}
+
+.crear{
+  opacity: 0;
+  position: absolute;
+  width: 300px;
+  height: 250px;
+}
+.modificar{
+  opacity: 0;
+  position: absolute;
+  width: 300px;
+  height: 400px;
+}
+.eliminar{
+  opacity: 0;
+  position: absolute;
+  width: 300px;
+  height: 400px;
+}
+.consultas{
+  opacity: 0;
+  position: absolute;
+  width: 300px;
+  height: 400px;
+}
+.listar{
+  opacity: 0;
+  position: absolute;
+  width: 300px;
+  height: 400px;
+}
+
+input[id="crear"]{
+  visibility: hidden;
+}
+input[id="modificar"]{
+  visibility: hidden;
+}
+input[id="eliminar"]{
+  visibility: hidden;
+}
+input[id="consultas"]{
+  visibility: hidden;
+}
+input[id="listar"]{
+  visibility: hidden;
+}
+
+input[id="crear"]:checked+label{
+  font-weight: bold;
+}
+input[id="modificar"]:checked+label{
+  font-weight: bold;
+}
+input[id="eliminar"]:checked+label{
+  font-weight: bold;
+}
+input[id="consultas"]:checked+label{
+  font-weight: bold;
+}
+input[id="listar"]:checked+label{
+  font-weight: bold;
+}
+
+input[id="crear"]:checked ~ .crear{
+  opacity: 1;
+}
+input[id="modificar"]:checked ~ .modificar{
+  opacity: 1;
+}
+input[id="eliminar"]:checked ~ .eliminar{
+  opacity: 1;
+}
+input[id="consultas"]:checked ~ .consultas{
+  opacity: 1;
+}
+input[id="listar"]:checked ~ .listar{
+  opacity: 1;
+}
+
+.crear{
+  transition: opacity 0.8s linear 0.2s;
+}
+.modificar{
+  transition: opacity 0.8s linear 0.2s;
+}
+.eliminar{
+  transition: opacity 0.8s linear 0.2s;
+}
+.consultas{
+  transition: opacity 0.8s linear 0.2s;
+}
+.listar{
+  transition: opacity 0.8s linear 0.2s;
+}

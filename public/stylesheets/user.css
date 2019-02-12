@@ -1,0 +1,86 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#layout{
+  width: 600px;
+  min-height: 480px;
+  margin: 0 auto;
+  text-align: right;
+}
+
+.administrador{
+  opacity: 0;
+  position: absolute;
+  width: 300px;
+  height: 250px;
+}
+.usuario{
+  opacity: 0;
+  position: absolute;
+  width: 300px;
+  height: 400px;
+}
+.create_account{
+  opacity: 0;
+  position: absolute;
+  width: 300px;
+  height: 400px;
+}
+
+input[id="administrador"]{
+  visibility: hidden;
+}
+input[id="usuario"]{
+  visibility: hidden;
+}
+input[id="create_account"]{
+  visibility: hidden;
+}
+input[id="consultas"]{
+  visibility: hidden;
+}
+
+input[id="administrador"]:checked+label{
+  font-weight: bold;
+}
+input[id="usuario"]:checked+label{
+  font-weight: bold;
+}
+input[id="create_account"]:checked+label{
+  font-weight: bold;
+}
+input[id="consultas"]:checked+label{
+  font-weight: bold;
+}
+
+input[id="administrador"]:checked ~ .administrador{
+  opacity: 1;
+}
+input[id="usuario"]:checked ~ .usuario{
+  opacity: 1;
+}
+input[id="create_account"]:checked ~ .create_account{
+  opacity: 1;
+}
+input[id="consultas"]:checked ~ .consultas{
+  opacity: 1;
+}
+
+.administrador{
+  transition: opacity 0.8s linear 0.2s;
+}
+.usuario{
+  transition: opacity 0.8s linear 0.2s;
+}
+.create_account{
+  transition: opacity 0.8s linear 0.2s;
+}
+.consultas{
+  transition: opacity 0.8s linear 0.2s;
+}

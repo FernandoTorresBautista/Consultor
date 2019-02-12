@@ -1,0 +1,59 @@
+extends layout
+block content
+	nav
+		p Administrador
+		br
+		li
+			a(href="./ui") Ui
+		|   
+		li
+			a(href="./query") Consultas
+		|   
+		li
+			a(href="./views") Listar views
+		|   
+		li
+			a(href="./document") Documentos
+		|   
+		li
+			a(href="./db") Conexiones
+		|   
+		li
+			a(href="./usuarios") Usuarios
+		|   
+		li
+			a(href="./out_session") Cerrar sesión
+		|   
+		br
+	nav
+		li
+			a.active(href="./crear", class="active") Crear usuario
+		|   
+		li
+			a(href="./modificar") Modificar usuario
+		|   
+		li
+			a(href="./eliminar") Eliminar usuario
+		|   
+	br
+	nav 
+		form(method="POST", action="./administrador/create_user")
+			label Id:   
+			input(type="int", name="id")
+			br
+			|       
+			label Db_id:   
+			input(type="int", name="db_id")
+			br
+			|       
+			label E-mail:   
+			input(type="email", name="email")
+			br
+			|       
+			label Rol:   
+			input(type="text", name="rol")
+			br
+			|       
+			input(type="submit", value="Aceptar")
+			br
+		br

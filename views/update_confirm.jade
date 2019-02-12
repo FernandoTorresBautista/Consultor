@@ -1,0 +1,60 @@
+extends layout
+block content
+	nav
+		p Administrador
+		br
+		li
+			a(href="./ui") Ui
+		|   
+		li
+			a(href="./query") Consultas
+		|   
+		li
+			a(href="./views") Listar views
+		|   
+		li
+			a(href="./document") Documentos
+		|   
+		li
+			a(href="./db") Conexiones
+		|   
+		li
+			a(href="./usuarios") Usuarios
+		|   
+		li
+			a(href="./out_session") Cerrar sesión
+		|   
+		br
+	nav
+		li
+			a(href="./crear") Crear usuario
+		|   
+		li
+			a.active(href="./modificar", class="active") Modificar usuario
+		|   
+		li
+			a(href="./eliminar") Eliminar usuario
+		|   
+	br
+	nav
+		p Usuario a modificar
+		br
+		each usuario in usuarios
+			form(method="POST", action="./update_user_f")
+				label Modifique los datos del usuario.
+				br
+				label Db_id:   
+				input(type="int", name="db_id", value=usuario.db_id )
+				br
+				|       
+				label E-mail:   
+				input(type="email", name="email", value=usuario.email)
+				br
+				|       
+				label Rol:   
+				input(type="text", name="rol", value=usuario.rol)
+				input(type="hidden", name="id", value=usuario.id)
+				br
+				|       
+				input(type="submit", value="Modificar")
+		br

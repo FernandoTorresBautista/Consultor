@@ -1,0 +1,28 @@
+extends layout
+block content
+	nav
+		p Consultor
+		br
+		li
+			a(href='./admin') Login Admin
+		|   
+		li
+			a.active(href="./user", class="active") Login User
+		|   
+		li
+			a(href="./create_account") Create account
+		br
+		br
+	nav
+		form(method="post", action="./usuario")
+			label E-mail:   
+			input(type="email", name="email")
+			br
+			|       
+			label Contraseña:   
+			input(type="password", name="pass")
+			br
+			|       
+			input(type="submit", value="Aceptar")
+			br
+		br

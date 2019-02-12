@@ -1,0 +1,82 @@
+CREATE TABLE db(
+	id int primary key,
+	name varchar(50),
+	description varchar(256),
+	user varchar(50),
+	password varchar(50),
+	dbname varchar(50),
+	dsn varchar(50),
+	hostsocket varchar(50),
+	classname varchar(50),
+	subprotocol varchar(50),
+	params varchar(50)
+);
+
+CREATE TABLE dbaccess(
+	id int primary key,
+	db_id int,
+	email varchar(50),
+	rol varchar(50),
+	foreign key(db_id) references db(id)
+);
+
+//INSERT INTO dbaccess(id, db_id, email, rol) VALUES (1, null, fernandot371@gmail.com, administrador)
+
+CREATE TABLE query(
+	id int primary key,
+	category varchar(50),
+	name varchar(50),
+	description text,
+	db_id int,
+	sql_ text,
+	error varchar(256),
+	ptypes varchar(50),
+	email varchar(50),
+	created_at date,
+	unique(name),
+	foreign key(db_id) references db(id)
+);
+
+CREATE TABLE view(
+	id int primary key,
+	name varchar(50),
+	query_id int,
+	sql_ text,
+	error varchar(256),
+	created_at date,
+	unique(name)
+);
+
+CREATE TABLE ui(
+	id int primary key,
+	name varchar(50),
+	description varchar(256),
+	index_ varchar(50),
+	email varchar(50),
+	ekey varchar(50),
+	created_at date,
+	unique(name)
+);
+
+CREATE TABLE document(
+	id int primary key,
+	ui_id int,
+	name varchar(50),
+	mime varchar(20),
+	description varchar(256),
+	content varchar(256),
+	created_at date,
+	updated_at date,
+	foreign key(ui_id) references db(id)
+);
+
+CREATE TABLE session(
+	id int primary key,
+	sid varchar(100),
+	email varchar(100),
+	rols varchar(256),
+	created_at date,
+	closed_at date,
+	duration int,
+	data text
+);

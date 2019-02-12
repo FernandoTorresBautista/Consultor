@@ -1,0 +1,63 @@
+extends layout
+block content
+	nav
+		p Usuario
+		br
+		li
+			a(href="./oui") Ui
+		|   
+		li
+			a(href="./oquery") Consultas
+		|   
+		li
+			a(href="./oviews") Listar views
+		|   
+		li
+			a(href="./odocument") Documentos
+		|   
+		li
+			a(href="./odb") Conexiones
+		|   
+		li
+			a(href="./ologout") Cerrar sesión
+		|   
+	nav
+		li
+			a.active(href='./oadd_doc', class="active") Agregar documento
+		|   
+		li
+			a(href='./oupd_doc') Modificar documento
+		|   
+		li
+			a(href="./odel_doc") Eliminar documento
+		|   
+		br
+	nav
+		form(method="POST", action="./oadd_document/agregar")
+			label Id:   
+			input(type="int", name="id")
+			br
+			|       
+			label Ui_id:   
+			input(type="int", name="ui_id")
+			br
+			|       
+			label Nombre:   
+			input(type="text", name="name")
+			br
+			|       
+			label MIME:   
+			input(type="text", name="mime")
+			br
+			|       
+			label Descripción:   
+			input(type="text", name="description")
+			br
+			|       
+			label content:   
+			input(type="text", name="content")
+			br
+			|       
+			input(type="submit", value="Aceptar")
+		br
+

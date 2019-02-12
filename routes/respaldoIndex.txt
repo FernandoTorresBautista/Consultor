@@ -1,0 +1,918 @@
+var express = require('express');
+var router = express.Router();
+var UserModel = require('../public/javascripts/db');
+var db2 = require('../public/javascripts/db.js');
+
+/* GET home page. */
+router.get('/', function(req, res, next) {
+	res.render('index', { title: 'Consultor' });
+});
+
+/* GET login admin */
+router.get('/admin', function(req, res, next) {
+	res.render('admin', { title: 'Sesion de administrador' });
+});
+
+/* GET login user */
+router.get('/user', function(req, res, next) {
+	res.render('user', { title: 'Sesion de usuario' });
+});
+
+/* GET crear cuenta */
+router.get('/create_account', function(req, res, next) {
+	res.render('create_account', { title: 'Crear cuenta'});
+});
+
+
+/****************** Get admin page **************************************/
+
+router.post('/administrador', function(req, res, next) {
+	var rp = require('request-promise');
+  	var options = {
+    	method: 'POST',
+    	uri: 'http://192.168.43.162:3000/login',
+    	body: {
+      	email: req.body.email,//'fernandot371@gmail.com',
+      	pass: req.body.pass,//portgas',
+      	service: 'consultorjs'
+    	},
+    	json: true // Automatically stringifies the body to JSON
+	};
+	rp(options)
+    .then(function (parsedBody) {
+        if(parsedBody!=null){
+          console.log(parsedBody);
+
+          	res.render('administrador', { title: 'Sesion de administrador' });
+        }
+        else {
+          //no se autentifico
+        }
+    })
+    .catch(function (err) {
+        // POST failed...
+    });
+});
+
+router.get('/ui', function(req, res, next) {
+	UserModel.getUis(function(error, data){
+		res.render('ui', { uis: data} );
+	});
+});
+
+//1
+router.get('/query/:nombre_query', function(req, res, next) {
+	UserModel.conectar('localhost','root','portgas','consultor');
+	UserModel.getQuerys3(req.params.nombre_query, function(error, data){
+		UserModel.getDB(data[0].db_id,function(error, data2){
+			db2.conectar('localhost', 'root', 'portgas', 'horarios');
+			db2.Consulta(data[0], function(err, data3){
+				if( !(data3 && data3.msg) ){
+					console.log(req.sessionID);
+					res.send(data3);
+				}
+				else{
+					console.log(req.sessionID);
+					res.json(403,{"msg":""});
+				}
+			} )
+		});
+		//res.json(500,Consulta(data[0].sql_));
+	});
+});
+//2 Con el nombre de una ui puedes obtener el documento index 
+router.get('/ui/:nombre?/:sessionID?', function(req, res) {
+	UserModel.getUi(req.params.nombre, req.sessionID, function(error, data){
+		if( !(data && data.msg) ){
+			UserModel.getD(data[0].id, req.sessionID, function(error, data2){
+				if( !(data2 && data2.msg) ){
+					//AGREGAR CODIGO PARA EL TIPO DE MIME
+					res.set('Content-Type', data2[0].mime);
+					res.send(data2[0].content);
+				}
+				else{
+					res.json(403,{"msg":""});
+				}
+			});
+
+		}
+		else{
+			res.json(403,{"msg":""});
+		}
+	})
+});
+//3 Ejecucion de un docuento individual
+router.get('/ui/:nombre_ui/:nombre_doc?', function(req, res) {
+	if( req.params.nombre_doc ){
+		UserModel.getDocumento(req.params.nombre_ui, req.params.nombre_doc, req.sessionID, function(error, data){
+			if( error ){
+				console.log(data[0].id+"jsjsjsjsjjs");
+				//res.set('Content-Type', data.mime);
+				res.send(data[0].content);
+			}
+			else{
+				res.json(403,{"msg":""});
+			}
+		});		
+	}
+	else{
+		console(req.params.nombre_doc+"+*************************************************2");
+	}
+});
+
+router.get('/document', function(req, res) {
+	UserModel.getDocs( function(error, data){
+		if( !(data && data.msg) ){
+			res.render('document',{ docs: data});
+		}
+		else{
+			res.json(403,{"msg":""});
+		}
+	});
+});
+
+router.get('/add_doc', function(req, res, next) {
+	res.render('add_doc', { title:'Agrega Documento'} );
+});
+
+router.post("/add_document/agregar", function(req,res){
+	//creamos un objeto con los datos a insertar del usuario
+	var userData = {
+		id: req.body.id,
+		ui_id: req.body.ui_id,
+		name : req.body.name,
+		mime : req.body.mime,
+		description : req.body.description,
+		content : req.body.content,
+		created_at: new Date().toLocaleString(),
+		updated_at: new Date().toLocaleString()
+	};
+	UserModel.insertDoc(userData,function(error, data){
+		//si el usuario se ha insertado correctamente modificarstramos su info
+		if(data && data.msg){
+			res.json(200, {"msg":"Creado correctamente"});
+			//res.json(500,{"msg":"Creado correctamente"});
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+router.get("/upd_doc", function(req,res, next){
+	res.render('upd_doc', { title: 'Modificar un documento' });
+});
+
+router.post("/administrador/upd_confirm_doc", function(req,res, next){
+	UserModel.getDup(req.body.id, req.sessionID,function(error, data){
+		if (error) {            
+            res.json(500,{"msg":"Error"});
+        }
+        else {
+            res.render('upd_confirm_doc', { Docs: data } );
+        }    
+	});
+});
+
+router.post("/administrador/doc_save", function(req,res, next){
+	var userData = {
+		id : req.body.id,
+		ui_id : req.body.ui_id,
+		name : req.body.name,
+		mime : req.body.mime,
+		description : req.body.description,
+		content : req.body.content,
+		created_at : req.body.created_at,
+		updated_at : new Date().toLocaleString()
+	};
+	UserModel.updateDoc(userData,function(error, data){
+		if(data && data.msg){
+			res.json(200,{"msg":"Modificado correctamente"});
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+router.get('/del_doc', function(req, res, next) {
+	res.render('del_doc', { title:'Elimina documento'} );
+});
+
+router.post("/del_doc/eliminar", function(req,res){
+	UserModel.deleteDoc(req.body.id,function(error, data){
+		//si el usuario se ha insertado correctamente mostramos su info
+		if(data && data.msg){
+			//dar de retorno un html para que se muestre la info en una página
+			res.json(data);
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+
+
+router.get('/add_ui', function(req, res, next) {
+	res.render('add_ui', { title:'Agrega vista de datos'} );
+});
+
+router.post("/add_ui/agregar", function(req,res){
+	//creamos un objeto con los datos a insertar del usuario
+	var userData = {
+		id: req.body.id,
+		name : req.body.name,
+		description : req.body.description,
+		index_: req.body.index_,
+		email: req.body.email,
+		ekey: req.body.ekey,
+		created_at: new Date().toLocaleString()
+	};
+	UserModel.insertUi(userData,function(error, data){
+		//si el usuario se ha insertado correctamente modificarstramos su info
+		if(data && data.msg){
+			res.json(200, {"msg":"Creado correctamente"});
+			//res.json(500,{"msg":"Creado correctamente"});
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+router.get('/del_ui', function(req, res, next) {
+	res.render('del_ui', { title:'Elimina ui'} );
+});
+
+router.post("/del_ui/eliminar", function(req,res){
+	UserModel.deleteUi(req.body.id,function(error, data){
+		//si el usuario se ha insertado correctamente mostramos su info
+		if(data && data.msg){
+			//dar de retorno un html para que se muestre la info en una página
+			res.json(data);
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+/* GET page admin Querys */
+router.get('/query', function(req, res, next) {
+	UserModel.getQuerys(req.sessionID,function(error, data){
+		res.render('query_list', { consultas: data} );
+	});
+});
+
+/*router.get('/query/:sid?', function(req, res, next) {
+	UserModel.getQuerys(req.sessionID, function(error, data){
+		res.render('query_list', { consultas: data } );
+	});
+});*/
+
+router.get('/add_query', function(req, res, next) {
+	res.render('add_query', { title:'Agrega consulta'} );
+});
+
+router.post("/query/agregar", function(req,res){
+	//creamos un objeto con los datos a insertar del usuario
+	var userData = {
+		id: req.body.id,
+		category : req.body.category,
+		name : req.body.name,
+		description : req.body.description,
+		db_id: req.body.db_id,
+		sql_: req.body.sql_,
+		err: null,
+		ptypes: req.body.ptypes,
+		email: req.body.email,
+		created_at: new Date().toLocaleString()
+	};
+	UserModel.insertQuery(userData,function(error, data){
+		//si el usuario se ha insertado correctamente modificarstramos su info
+		if(data && data.msg){
+			res.json(200, {"msg":"Creado correctamente"});
+			//res.json(500,{"msg":"Creado correctamente"});
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+router.get('/del_query', function(req, res, next) {
+	res.render('del_query', { title:'Elimina consulta'} );
+});
+
+router.post("/query/eliminar", function(req,res){
+	UserModel.deleteQuery(req.body.id,function(error, data){
+		//si el usuario se ha insertado correctamente mostramos su info
+		if(data && data.msg){
+			//dar de retorno un html para que se muestre la info en una página
+			res.json(data);
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+router.get('/views', function(req, res, next){
+	UserModel.getViews(function(error, data){
+		res.render('views_list', { title:'Lista de vistas por consulta', views: data} );
+	});
+});
+
+router.get('/add_view', function(req, res, next) {
+	res.render('add_view', { title:'Agrega vista'} );
+});
+
+router.post("/add_view/agregar", function(req,res){
+	//creamos un objeto con los datos a insertar del usuario
+	var userData = {
+		id: req.body.id,
+		name : req.body.name,
+		query_id: req.body.query_id,
+		sql_: req.body.sql_,
+		err: null,
+		created_at: new Date().toLocaleString()
+	};
+	UserModel.insertView(userData,function(error, data){
+		//si el usuario se ha insertado correctamente modificarstramos su info
+		if(data && data.msg){
+			res.json(200, {"msg":"Creado correctamente"});
+			//res.json(500,{"msg":"Creado correctamente"});
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+router.get('/del_view', function(req, res, next) {
+	res.render('del_view', { title:'Elimina vista'} );
+});
+
+router.post("/del_view/eliminar", function(req,res){
+	UserModel.deleteView(req.body.id,function(error, data){
+		//si el usuario se ha insertado correctamente mostramos su info
+		if(data && data.msg){
+			//dar de retorno un html para que se muestre la info en una página
+			res.json(data);
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+
+/* GET page admin Connections */
+router.get("/db", function(req,res, next){
+	UserModel.getConexiones(req.sessionID,function(error, data){
+		res.render('conexiones', { dbs: data } );
+	});
+});
+
+router.get("/add_db", function(req, res, next){
+	res.render('add_db', { title:'Agrega db'} );
+});
+
+router.post("/add_db/agregar", function(req,res){
+	//creamos un objeto con los datos a insertar del usuario
+	var userData = {
+		id: req.body.id,
+		name : req.body.name,
+		description : req.body.description, 
+		user: req.body.user,
+		password : req.body.password,
+		dbname: req.body.dbname, 
+		dsn : req.body.dsn,
+		hostsocket : req.body.hostsocket,
+		classname : req.body.classname,
+		subprotocol : req.body.subprotocol,
+		params : req.body.params
+	};
+	UserModel.insertDB(userData,function(error, data){
+		//si el usuario se ha insertado correctamente modificarstramos su info
+		if(data && data.msg){
+			res.json(200, {"msg":"Creado correctamente"});
+			//res.json(500,{"msg":"Creado correctamente"});
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+router.get("/del_db", function(req, res, next){
+	res.render('del_db', { title:'Eliminar db'} );
+});
+
+router.post("/del_db/eliminar", function(req,res){
+	UserModel.deleteDB(req.body.id,function(error, data){
+		//si el usuario se ha insertado correctamente mostramos su info
+		if(data && data.msg){
+			//dar de retorno un html para que se muestre la info en una página
+			res.json(data);
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+router.get("/upd_db", function(req,res, next){
+	res.render('upd_db', { title: 'Modificar DB' });
+});
+
+router.post("/administrador/upd_db_confirm", function(req,res, next){
+	UserModel.getDB(req.body.id, function(error, data){
+		console.log( data );
+		if (error) {            
+            res.json(500,{"msg":"Error"});
+        }
+        if (data.length>0) {
+        	//res.json(data);
+            res.render('upd_db_confirm', {dbs: data} );
+        } else {
+            res.json(500,{"msg":"Error"});
+        }    
+	});
+});
+
+router.post("/administrador/upd_db_f", function(req,res){
+	//creamos un objeto con los datos a insertar del usuario
+	var userData = {
+		id : req.body.id,
+		name : req.body.name,
+		description : req.body.description,
+		user : req.body.user,
+		password : req.body.password,
+		dbname : req.body.dbname,
+		dsn : req.body.dsn,
+		hostsocket : req.body.hostsocket,
+		classname : req.body.classname,
+		subprotocol : req.body.subprotocol,
+		params : req.body.params
+	};
+	UserModel.updateDB(userData,function(error, data){
+		//si el usuario se ha insertado correctamente mostramos su info
+		if(data && data.msg){
+			res.json(200,{"msg":"BD modificada correctamente"});
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+/* GET page admin Users */
+router.get("/usuarios", function(req,res, next){
+	UserModel.getUsers(function(error, data){
+		res.render('listar', { usuarios: data } );
+	});
+});
+
+router.get("/crear", function(req,res, next){
+	res.render('create_user', { title: 'Crear un usuario' });
+});
+
+router.post("/administrador/create_user", function(req,res){
+	//creamos un objeto con los datos a insertar del usuario
+	var userData = {
+		id : req.body.id,
+		db_id : req.body.db_id || null,
+		email : req.body.email,
+		rol: req.body.rol
+	};
+	UserModel.insertUser(userData,function(error, data){
+		//si el usuario se ha insertado correctamente modificarstramos su info
+		if(data && data.msg){
+			res.json(200, {"msg":"Creado correctamente"});
+			//res.json(500,{"msg":"Creado correctamente"});
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+router.get("/modificar", function(req,res, next){
+	res.render('update_user', { title: 'Modificar un usuario' });
+});
+
+router.post("/administrador/update_confirm", function(req,res, next){
+	UserModel.getUser(req.body.id, function(error, data){
+		console.log( data );
+		if (error) {            
+            res.json(500,{"msg":"Error"});
+        }
+        if (data.length>0) {
+        	//res.json(data);
+            res.render('update_confirm', {usuarios: data} );
+        } else {
+            res.json(500,{"msg":"Error"});
+        }    
+	});
+});
+
+router.post("/administrador/update_user_f", function(req,res){
+	//creamos un objeto con los datos a insertar del usuario
+	var userData = {
+		id : req.body.id,
+		db_id : req.body.db_id || null,
+		email : req.body.email,
+		rol: req.body.rol,
+	};
+	UserModel.updateUser(userData,function(error, data){
+		//si el usuario se ha insertado correctamente mostramos su info
+		if(data && data.msg){
+			res.json(200,{"msg":"Modificado correctamente"});
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+router.get("/eliminar", function(req,res, next){
+	res.render('delete_user', { title: 'Eliminar un usuario' });
+});
+
+router.post("/administrador/delete_user", function(req,res){
+	//creamos un objeto con los datos a insertar del usuario
+	UserModel.deleteUser(req.body.id,function(error, data){
+		//si el usuario se ha insertado correctamente mostramos su info
+		if(data && data.msg){
+			//dar de retorno un html para que se muestre la info en una página
+			res.json(data);
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+
+/* GET page admin Out Session */
+router.get("/out_session", function(req,res, next){
+	res.json( 200, {'msg':'Ha cerrado sesión'} );
+});
+
+
+/*************************************************************************/
+
+
+/*********Usuario*********************************************************/
+
+router.post('/usuario', function(req, res, next) {
+	var rp = require('request-promise');
+  	var options = {
+    	method: 'POST',
+    	//uri: 'http://192.168.0.115:3000/login',
+    	uri: 'http://192.168.43.162:3000/login',
+    	body: {
+      	email: req.body.email,//'fernandot371@gmail.com',
+      	pass: req.body.pass,//portgas',
+      	service: 'consultorjs'
+    	},
+    	json: true // Automatically stringifies the body to JSON
+	};
+	rp(options)
+    .then(function (parsedBody) {
+        if(parsedBody!=null){
+          console.log(parsedBody);
+          	res.render('usuario', { title: 'Sesion de usuario' });
+        }
+        else {
+          //no se autentifico
+        }
+    })
+    .catch(function (err) {
+        // POST failed...
+    });
+});
+
+router.get('/oui', function(req, res, next) {
+	UserModel.getUis(function(error, data){
+		res.render('oui', { uis : data, title: 'Usuario'} );
+	});
+});
+router.get('/oadd_ui', function(req, res, next) {
+	res.render('oadd_ui', { title: 'Agregar uns ui'} );
+});
+router.post("/oadd_ui/agregar", function(req,res){
+	//creamos un objeto con los datos a insertar del usuario
+	var userData = {
+		id: req.body.id,
+		name : req.body.name,
+		description : req.body.description,
+		index_: req.body.index_,
+		email: req.body.email,
+		ekey: req.body.ekey,
+		created_at: new Date().toLocaleString()
+	};
+	UserModel.insertUi(userData,function(error, data){
+		//si el usuario se ha insertado correctamente modificarstramos su info
+		if(data && data.msg){
+			res.json(200, {"msg":"Creado correctamente"});
+			//res.json(500,{"msg":"Creado correctamente"});
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+router.get('/odel_ui', function(req, res, next) {
+	res.render('odel_ui', { title: 'Eliminar uns ui'} );
+});
+router.post("/odel_ui/eliminar", function(req,res){
+	UserModel.deleteUi(req.body.id,function(error, data){
+		//si el usuario se ha insertado correctamente mostramos su info
+		if(data && data.msg){
+			//dar de retorno un html para que se muestre la info en una página
+			res.json(data);
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+router.get('/oquery', function(req, res, next) {
+	UserModel.getQuerys(req.sessionID,function(error, data){
+		res.render('oquery', { uis : data, title: 'Consulta'} );
+	});
+});
+router.get('/oadd_q', function(req, res, next) {
+	res.render('oadd_q', { title: 'Agregar una consulta'} );
+});
+router.post("/oadd_q/agregar", function(req,res){
+	var userData = {
+		id: req.body.id,
+		category : req.body.category,
+		name : req.body.name,
+		description : req.body.description,
+		db_id: req.body.db_id,
+		sql_: req.body.sql_,
+		err: null,
+		ptypes: req.body.ptypes,
+		email: req.body.email,
+		created_at: new Date().toLocaleString()
+	};
+	UserModel.insertQuery(userData,function(error, data){
+		//si el usuario se ha insertado correctamente modificarstramos su info
+		if(data && data.msg){
+			res.json(200, {"msg":"Creado correctamente"});
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+router.get('/odel_q', function(req, res, next) {
+	res.render('odel_q', { title: 'Eliminar una consulta'} );
+});
+router.post("/odel_q/eliminar", function(req,res){
+	UserModel.deleteQuery(req.body.id,function(error, data){
+		//si el usuario se ha insertado correctamente mostramos su info
+		if(data && data.msg){
+			//dar de retorno un html para que se muestre la info en una página
+			res.json(data);
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+router.get('/oviews', function(req, res, next){
+	UserModel.getViews(function(error, data){
+		res.render('olist_view', { title:'Lista de vistas por consulta', views: data} );
+	});
+});
+router.get('/oadd_view', function(req, res, next) {
+	res.render('oadd_view', { title: 'Agregar una vista'} );
+});
+router.post("/oadd_view/agregar", function(req,res){
+	var userData = {
+		id: req.body.id,
+		name : req.body.name,
+		query_id: req.body.query_id,
+		sql_: req.body.sql_,
+		err: null,
+		created_at: new Date().toLocaleString()
+	};
+	UserModel.insertView(userData,function(error, data){
+		if(data && data.msg){
+			res.json(200, {"msg":"Creado correctamente"});
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+router.get('/odel_view', function(req, res, next) {
+	res.render('odel_view', { title: 'Eliminar una vista'} );
+});
+router.post("/odel_view/eliminar", function(req,res){
+	UserModel.deleteView(req.body.id,function(error, data){
+		if(data && data.msg){
+			res.json(data);
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+router.get('/odocument',function(req, res, next){
+	UserModel.getDocs(function(error, data){
+		res.render('odocument', { title:'Lista de documentos', docs: data} );
+	});
+});
+router.get('/oadd_doc', function(req, res, next) {
+	res.render('oadd_doc', { title: 'Agrega un documento'} );
+});
+router.post("/oadd_doc/agregar", function(req,res){
+	var userData = {
+		id: req.body.id,
+		name : req.body.name,
+		query_id: req.body.query_id,
+		sql_: req.body.sql_,
+		err: null,
+		created_at: new Date().toLocaleString()
+	};
+	UserModel.insertView(userData,function(error, data){
+		if(data && data.msg){
+			res.json(200, {"msg":"Creado correctamente"});
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+router.get('/odel_doc', function(req, res, next) {
+	res.render('odel_doc', { title: 'Eliminar un documento'} );
+});
+router.post("/odel_doc/eliminar", function(req,res){
+	UserModel.deleteD(req.body.id,function(error, data){
+		if(data && data.msg){
+			res.json(data);
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+router.get("/oupd_doc", function(req,res, next){
+	res.render('oupd_doc', { title: 'Modificar un documento' });
+});
+
+router.post("/oupd_doc/oupd_confirm_doc", function(req,res, next){
+	UserModel.getD(req.body.id,req.sessionID, function(error, data){
+		console.log( data );
+		if (error) {            
+            res.json(500,{"msg":"Error"});
+        }
+        if (data.length>0) {
+            res.render('oupd_confirm_doc', {Docs: data} );
+        } else {
+            res.json(500,{"msg":"Error"});
+        }    
+	});
+});
+
+router.post("/oupd_doc/odoc_save", function(req,res){
+	var userData = {
+		id : req.body.id,
+		ui_id : req.body.ui_id,
+		name: req.body.name,
+		mime: req.body.mime,
+		description : req.body.description,
+		content : req.body.content,
+		created_at : req.body.created_at,
+		updated_at : new Date().toLocaleString()
+	};
+	UserModel.updateDoc(userData,function(error, data){
+		if(data && data.msg){
+			res.json(200,{"msg":"Modificado correctamente"});
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+router.get('/odb', function(req, res, next) {
+	UserModel.getDBs(function(error, data){
+		res.render('odb', { title: 'Agrega un documento', dbs:data } );	
+	});	
+});
+
+router.post("/odb/agregar", function(req,res){
+	//creamos un objeto con los datos a insertar del usuario
+	var userData = {
+		id: req.body.id,
+		name : req.body.name,
+		description : req.body.description, 
+		user: req.body.user,
+		password : req.body.password,
+		dbname: req.body.dbname, 
+		dsn : req.body.dsn,
+		hostsocket : req.body.hostsocket,
+		classname : req.body.classname,
+		subprotocol : req.body.subprotocol,
+		params : req.body.params
+	};
+	UserModel.insertDB(userData,function(error, data){
+		//si el usuario se ha insertado correctamente modificarstramos su info
+		if(data && data.msg){
+			res.json(200, {"msg":"Creado correctamente"});
+			//res.json(500,{"msg":"Creado correctamente"});
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+router.get("/odel_db", function(req, res, next){
+	res.render('odel_db', { title:'Eliminar db'} );
+});
+router.post("/odel_db/eliminar", function(req,res){
+	UserModel.deleteDB(req.body.id,function(error, data){
+		//si el usuario se ha insertado correctamente mostramos su info
+		if(data && data.msg){
+			//dar de retorno un html para que se muestre la info en una página
+			res.json(data);
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+router.get("/oupd_db", function(req,res, next){
+	res.render('oupd_db', { title: 'Modificar DB' });
+});
+router.post("/oupd_db/confirm", function(req,res, next){
+	UserModel.getDB(req.body.id, function(error, data){
+		console.log( data );
+		if (error) {            
+            res.json(500,{"msg":"Error"});
+        }
+        if (data.length>0) {
+        	//res.json(data);
+            res.render('upd_db_confirm', {dbs: data} );
+        } else {
+            res.json(500,{"msg":"Error"});
+        }    
+	});
+});
+router.post("/oupd_db/oupdate", function(req,res){
+	//creamos un objeto con los datos a insertar del usuario
+	var userData = {
+		id : req.body.id,
+		name : req.body.name,
+		description : req.body.description,
+		user : req.body.user,
+		password : req.body.password,
+		dbname : req.body.dbname,
+		dsn : req.body.dsn,
+		hostsocket : req.body.hostsocket,
+		classname : req.body.classname,
+		subprotocol : req.body.subprotocol,
+		params : req.body.params
+	};
+	UserModel.updateDB(userData,function(error, data){
+		//si el usuario se ha insertado correctamente mostramos su info
+		if(data && data.msg){
+			res.json(200,{"msg":"BD modificada correctamente"});
+		}
+		else{
+			res.json(500,{"msg":"Error"});
+		}
+	});
+});
+
+/*************************************************************************/
+
+
+router.get('/logout', function(req, res, next) {
+      req.session.destroy();
+      var pagina='<!doctype html><html><head></head><body>'+
+               '<br><a href="./">Retornar</a></body></html>';
+      res.send(pagina);
+});
+
+/* GET crear cuenta realizado*/
+router.get('/account_done', function(req, res, next) {
+	res.send( { title: 'Usuario creado con éxito' });
+});
+
+
+module.exports = router;

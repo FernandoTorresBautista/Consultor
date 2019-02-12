@@ -1,0 +1,66 @@
+extends layout
+block content
+	nav
+		p Usuario
+		br
+		li
+			a(href="./oui") Ui
+		|   
+		li
+			a(href="./oquery") Consultas
+		|   
+		li
+			a(href="./oviews") Listar views
+		|   
+		li
+			a(href="./odocument") Documentos
+		|   
+		li
+			a(href="./odb") Conexiones
+		|   
+		li
+			a(href="./ologout") Cerrar sesión
+		|   
+	nav
+		li
+			a(href='./add_doc') Agregar documento
+		|   
+		li
+			a.active(href='./upd_doc', class="active") Modificar documento
+		|   
+		li
+			a(href="./del_doc") Eliminar documento
+		|   
+		br
+	nav
+		p Documento a modificar
+		each doc in Docs
+			form(method="POST", action="./odoc_save")
+				label id:
+				input(type="int", name="id", value=doc.id)
+				br
+				|       
+				label ui_id:
+				input(type="int", name="ui_id", value=doc.ui_id)
+				br
+				|       
+				label Nombre:   
+				input(type="text", name="name", value=doc.name )
+				br
+				|       
+				label mime:   
+				input(type="text", name="mime", value=doc.mime)
+				br
+				|       
+				label description:   
+				input(type="text", name="description", value=doc.description)
+				br
+				|       
+				label content:   
+				input(type="text", name="content", value=doc.content)
+				br
+				|       
+				input(type="hidden", name="created_at", value=doc.created_at)
+				|       
+				input(type="submit", value="Modificar")
+		br

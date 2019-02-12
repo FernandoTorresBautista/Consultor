@@ -1,0 +1,54 @@
+extends layout
+block content
+	nav
+		p Administrador
+		br
+		li
+			a(href="./ui") Ui
+		|   
+		li
+			a.active(href="./query", class="active") Consultas
+		|   
+		li
+			a(href="./views") Listar views
+		|   
+		li
+			a(href="./document") Documentos
+		|   
+		li
+			a(href="./db") Conexiones
+		|   
+		li
+			a(href="./usuarios") Usuarios
+		|   
+		li
+			a(href="./out_session") Cerrar sesión
+		|   
+	nav
+		li
+			a(href='./add_query') Agregar consulta
+		|   
+		li
+			a(href="./del_query") Eliminar consulta
+		|   
+	nav
+		P Lista de consultas
+		table(border='1')
+			thead
+				tr
+					th id
+					th categoria
+					th name
+					th descripton
+					th sql
+					th email
+				each consulta in consultas
+					tr
+						td=consulta.id
+						td=consulta.category
+						td=consulta.name
+						td=consulta.description
+						td=consulta.sql_
+						td=consulta.email
+		br
+

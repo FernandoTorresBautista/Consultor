@@ -1,0 +1,48 @@
+extends layout
+block content
+	nav
+		p Administrador
+		br
+		li
+			a(href="./ui") Ui
+		|   
+		li
+			a(href="./query") Consultas
+		|   
+		li
+			a(href="./views") Listar views
+		|   
+		li
+			a(href="./document") Documentos
+		|   
+		li
+			a(href="./db") Conexiones
+		|   
+		li
+			a(href="./usuarios") Usuarios
+		|   
+		li
+			a(href="./out_session") Cerrar sesión
+		|   
+		br
+	nav
+		li
+			a(href="./crear") Crear usuario
+		|   
+		li
+			a.active(href="./modificar", class="active") Modificar usuario
+		|   
+		li
+			a(href="./eliminar") Eliminar usuario
+		|   
+	br
+	nav 
+		p Buscar usuario a modificar
+		form(method="POST", action="./administrador/update_confirm")
+			label Ingrese el id del usuario a modificar:   
+			input(type="int", name="id")
+			|       
+			br
+			input(type="submit", value="Buscar")
+			br
+		br

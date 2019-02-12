@@ -1,0 +1,53 @@
+extends layout
+block content
+	nav
+		p Usuario
+		br
+		li
+			a(href="./oui") Ui
+		|   
+		li
+			a(href="./oquery") Consultas
+		|   
+		li
+			a(href="./oviews") Listar views
+		|   
+		li
+			a(href="./odocument") Documentos
+		|   
+		li
+			a.active(href="./odb", class="active") Conexiones
+		|   
+		li
+			a(href="./ologout") Cerrar sesión
+		|   
+	nav
+		li
+			a(href='./oadd_db') Agregar conexion a db
+		|   
+		li
+			a(href='./oupd_db') Modificar conexion a db
+		|   
+		li
+			a(href="./odel_db") Eliminar conexion a db
+		|   
+		br
+	nav
+		p Lista de conexiones 
+		table(border='1')
+			thead
+				tr
+					th id
+					th name
+					th description
+					th user
+					th params
+			tbody
+				each db in dbs
+					tr
+						td=db.id
+						td=db.name
+						td=db.description
+						td=db.user
+						td=db.params
+		br

@@ -1,0 +1,43 @@
+extends layout
+block content
+	nav
+		p Administrador
+		br
+		li
+			a(href="./ui") Ui
+		|   
+		li
+			a(href="./query") Consultas
+		|   
+		li
+			a.active(href="./views", class="active") Listar views
+		|   
+		li
+			a(href="./document") Documentos
+		|   
+		li
+			a(href="./db") Conexiones
+		|   
+		li
+			a(href="./usuarios") Usuarios
+		|   
+		li
+			a(href="./out_session") Cerrar sesión
+		|   
+	nav
+		li
+			a(href='./add_query') Agregar view
+		|   
+		li
+			a(href="./del_query") Eliminar view
+		|   
+	nav
+		form(method="POST", action="./views/list")
+			label Ingrese el id de la consulta:   
+			br
+			input(type="int", name="id")
+			|       
+			br
+			input(type="submit", value="Listar views")
+			br
+		br

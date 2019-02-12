@@ -1,0 +1,43 @@
+extends layout
+block content
+	nav
+		p Usuario
+		br
+		li
+			a(href="./oui") Ui
+		|   
+		li
+			a(href="./oquery") Consultas
+		|   
+		li
+			a(href="./oviews") Listar views
+		|   
+		li
+			a(href="./odocument") Documentos
+		|   
+		li
+			a.active(href="./odb", class="active") Conexiones
+		|   
+		li
+			a(href="./ologout") Cerrar sesión
+		|   
+	nav
+		li
+			a(href='./oadd_db') Agregar conexion a db
+		|   
+		li
+			a(href='./oupd_db') Modificar conexion a db
+		|   
+		li
+			a.active(href="./odel_db", class="active") Eliminar conexion a db
+		|   
+		br
+	nav
+		form(method="POST", action="./odel_db/confirm")
+			label Id:   
+			input(type="int", name="id")
+			br
+			|       
+			input(type="submit", value="Aceptar")
+		br
+

@@ -1,0 +1,155 @@
+/*body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}*/
+  
+html{
+  background: #020202; 
+  font-family: 'Lato', helvetica, arial, sans-serif; 
+  font-size: 16px; 
+  color: #222;
+}
+
+header{
+  display: block; 
+  text-decoration: underline overline;
+  font: 80px Helvetica, Arial, Sans-Serif; 
+  letter-spacing: -5px;  
+  text-align: center;
+  color: #444; 
+  text-shadow: 0px 3px 8px #2a2a2a;
+}
+
+nav{
+    -webkit-border-radius:10px; /*chrome  Safari*/
+    -moz-border-radius:10px;/* Firefox*/
+    -o-border-radius:10px;/*Opera*/
+    border-radius:10px;/*estandar*/
+    
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#CCC));/*chrome  Safari*/
+    background-image: -moz-linear-gradient(top center, #FFF, #CCC);/*Firefox*/
+    background-image: -o-linear-gradient(top, #FFF, #CCC);/*Opera*/
+    background-image: linear-gradient(top, #FFF, #CCC);/*estandar*/
+    
+    overflow:hidden; /*visible hidden scroll auto*/
+    padding:10px;
+  background: #f2f2f2;
+  margin: 30px auto;
+    width:1200px;    
+}
+
+nav ul{
+    list-style:none;
+    margin:0 10px 0 10px;
+    padding:0;
+    float:left;
+}
+      
+nav li {
+  -webkit-border-radius:5px;/*Chrome y Safari*/
+    -moz-border-radius:5px;/*Firefox*/
+    -o-border-radius:5px;/*Opera*/
+    border-radius:5px;/*Estandar por defecto*/
+    float:left; /* posiciona los elementos de forma flotante */
+    margin-right:10px;
+    text-align:center;
+    list-style:none;
+    text-shadow: 0px 1px 0px #FFF;
+}
+      
+nav li a {
+  color:#000;
+  display:block;
+  text-decoration:none;
+  padding:10px;
+  -webkit-transition: 0.4s linear all;
+    -moz-transition: 0.4s linear all;
+    -o-transition: 0.4s linear all;
+    transition: 0.4s linear all;
+}
+      
+nav li a:hover {
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#FFF), to( #E3E3E3));
+    background-image: -moz-linear-gradient(top center, #FFF, #E3E3E3);
+    background-image: -o-linear-gradient(top, #FFF, #E3E3E3);
+    background-image: linear-gradient(top, #FFF, #E3E3E3);
+    
+  background-color:#f0f0f0;
+}
+
+
+/*
+#layout{
+  width: 600px;
+  min-height: 480px;
+  margin: 0 auto;
+  text-align: right;
+}
+
+.administrador{
+  opacity: 0;
+  position: absolute;
+  width: 300px;
+  height: 400px;
+}
+.usuario{
+  opacity: 0;
+  position: absolute;
+  width: 300px;
+  height: 400px;
+}
+.create_account{
+  opacity: 0;
+  position: absolute;
+  width: 300px;
+  height: 400px;
+}
+
+input[id="administrador"]{
+  visibility: hidden;
+}
+input[id="usuario"]{
+  visibility: hidden;
+}
+input[id="create_account"]{
+  visibility: hidden;
+}
+
+
+input[id="administrador"]:checked+label{
+  font-weight: bold;
+}
+input[id="usuario"]:checked+label{
+  font-weight: bold;
+}
+input[id="create_account"]:checked+label{
+  font-weight: bold;
+}
+
+input[id="administrador"]:checked ~ .administrador{
+  opacity: 1;
+  display: block;
+}
+input[id="usuario"]:checked ~ .usuario{
+  opacity: 1;
+  display: block;
+}
+input[id="create_account"]:checked ~ .create_account{
+  opacity: 1;
+  display: block;
+}
+
+.administrador{
+  transition: opacity 0.8s linear 0.2s;
+}
+.usuario{
+  transition: opacity 0.8s linear 0.2s;
+}
+.create_account{
+  transition: opacity 0.8s linear 0.2s;
+}
+*/
